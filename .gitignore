@@ -1,0 +1,12 @@
+# VS Code settings
+.vscode/
+
+# Node modules (future React projects ki)
+node_modules/
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db

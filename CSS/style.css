@@ -1835,3 +1835,344 @@ width:100%;
 }
 
 }
+
+/* ==============================
+   RESPONSIVE DESIGN
+   Desktop + Tablet + Mobile
+================================ */
+
+
+/* Large Desktop (1200px and above) */
+@media (min-width:1200px){
+
+    .container{
+        width:90%;
+        max-width:1200px;
+        margin:auto;
+    }
+
+    .rooms-container{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+
+/* Laptop View */
+@media (max-width:1199px){
+
+    .container{
+        width:90%;
+        margin:auto;
+    }
+
+
+    .rooms-container{
+        grid-template-columns:repeat(2,1fr);
+        gap:25px;
+    }
+
+
+    .hero h1{
+        font-size:45px;
+    }
+
+}
+
+
+
+/* Tablet View */
+@media (max-width:768px){
+
+    body{
+        overflow-x:hidden;
+    }
+
+
+    /* Navbar */
+
+    nav{
+        flex-direction:column;
+        gap:20px;
+    }
+
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+
+
+    /* Hero Section */
+
+    .hero{
+        height:auto;
+        padding:100px 20px;
+        text-align:center;
+    }
+
+
+    .hero h1{
+        font-size:38px;
+    }
+
+
+    .hero p{
+        font-size:16px;
+    }
+
+
+
+    /* About Section */
+
+    .about-container{
+        flex-direction:column;
+        text-align:center;
+    }
+
+
+    .about-container img{
+        width:100%;
+    }
+
+
+
+
+    /* Rooms */
+
+    .rooms-container{
+        grid-template-columns:1fr;
+    }
+
+
+    .room-card{
+        width:100%;
+    }
+
+
+
+    /* Facilities */
+
+    .facilities-container{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+
+
+}
+
+
+
+/* Mobile View */
+/* ==============================
+   MOBILE RESPONSIVE FIX
+   (Only Mobile View)
+================================ */
+
+@media (max-width:480px){
+
+    body{
+        overflow-x:hidden;
+    }
+
+
+    .container{
+        width:92%;
+        margin:auto;
+    }
+
+
+
+    /* =================
+       MOBILE NAVBAR
+    ================== */
+
+    nav{
+        flex-direction:column;
+        align-items:center;
+        padding:20px 0;
+    }
+
+
+    nav ul{
+
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:15px;
+        width:100%;
+
+    }
+
+
+    nav ul li{
+
+        list-style:none;
+
+    }
+
+
+    nav ul li a{
+
+        display:block;
+        font-size:16px;
+        padding:8px;
+
+    }
+
+
+
+    /* =================
+       HERO SECTION FIX
+    ================== */
+
+
+    .hero{
+
+        min-height:100vh;
+        padding:140px 20px 80px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+
+    }
+
+
+    .hero h1{
+
+        font-size:32px;
+        line-height:1.2;
+        margin-bottom:20px;
+
+    }
+
+
+    .hero p{
+
+        font-size:16px;
+        line-height:1.6;
+
+    }
+
+
+    .hero button{
+
+        width:auto;
+        padding:14px 30px;
+
+    }
+
+
+
+
+
+    /* =================
+       ABOUT IMAGE FIX
+    ================== */
+
+
+    .about-container{
+
+        flex-direction:column;
+        gap:30px;
+
+    }
+
+
+    .about-container img{
+
+        width:100%;
+        height:280px;
+        object-fit:cover;
+        border-radius:15px;
+
+    }
+
+
+
+    /* =================
+       ROOM IMAGES FIX
+    ================== */
+
+
+    .room-card img{
+
+        width:100%;
+        height:230px;
+        object-fit:cover;
+
+    }
+
+
+
+
+    /* =================
+       GENERAL SPACING
+    ================== */
+
+
+    section{
+
+        padding:60px 0;
+
+    }
+
+
+    h2{
+
+        font-size:28px;
+        text-align:center;
+
+    }
+
+
+}
+
+
+    /* Room Cards */
+
+    .room-card img{
+        height:220px;
+        object-fit:cover;
+    }
+
+
+
+    .room-content h3{
+        font-size:22px;
+    }
+
+
+
+    /* Facilities */
+
+    .facilities-container{
+        grid-template-columns:1fr;
+    }
+
+
+
+    footer{
+        text-align:center;
+    }
+
+
+
+
+/* Prevent Image Overflow */
+
+img{
+
+    max-width:100%;
+    height:auto;
+
+}
+
+
+/* Smooth Responsive Layout */
+
+*{
+    box-sizing:border-box;
+}

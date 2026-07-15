@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1784026656044,
+    "name": "pavani",
+    "email": "pavani123@gmail.com",
+    "phone": "9876543210",
+    "password": "$2b$10$FtrC3obEG6rAGfqUBE6kuuZMBLTfndVpiZ8nmJGHgvp96OopLMMWe",
+    "createdAt": "2026-07-14T10:57:36.044Z"
+  },
+  {
+    "id": 1784029396909,
+    "name": "jc",
+    "email": "jc@gmail.com",
+    "phone": "30214566987",
+    "password": "$2b$10$tk5autKv975UMrMCoexKcew1O2DksJ6CQFh8zoVrvlHou06X.nQaK",
+    "createdAt": "2026-07-14T11:43:16.909Z"
+  },
+  {
+    "id": 1784029497603,
+    "name": "papa",
+    "email": "papa@gmail.com",
+    "phone": "7485961256",
+    "password": "$2b$10$DYBgSHxUl.Fqu18k3rawj.GW/myksmPLmQpQ6Yadh8Yi9On8/sFPq",
+    "createdAt": "2026-07-14T11:44:57.603Z"
+  },
+  {
+    "id": 1784031184956,
+    "name": "ammu",
+    "email": "ammu@gmail.com",
+    "phone": "5468791256",
+    "password": "$2b$10$/1Jin8MzaIW3mRVCaEW75u1LvLPTe96UmFMpLOfQjl.oLZL6i0uA2",
+    "createdAt": "2026-07-14T12:13:04.956Z"
+  },
+  {
+    "id": 1784089623975,
+    "name": "priya",
+    "email": "priyamanchu123@gmail.com",
+    "phone": "5847123956",
+    "password": "$2b$10$PtRqV4od70pwufWyzjTlc.Gz8RIP/l3ORsJXnHYDxJNE/cX12UlT2",
+    "createdAt": "2026-07-15T04:27:03.975Z"
+  },
+  {
+    "id": 1784090647447,
+    "name": "sagar",
+    "email": "sagar@gmail.com",
+    "phone": "6412578932",
+    "password": "$2b$10$CwzL3L3HzDNUmsJp0Dil6O4uDX1KefIkxKqn.AQ0.PqoUaS9WwrBK",
+    "createdAt": "2026-07-15T04:44:07.447Z"
+  },
+  {
+    "id": 1784090996625,
+    "name": "reddy",
+    "email": "reddy22@gmail.com",
+    "phone": "3456987152",
+    "password": "$2b$10$1zwMhzPKpZN46c8KxsiwHe3G/QbrYXnE8rT3tEy9zK3asZMRgSrua",
+    "createdAt": "2026-07-15T04:49:56.625Z"
+  },
+  {
+    "id": 1784099847887,
+    "name": "Pavani",
+    "email": "pavani2026@gmail.com",
+    "phone": "9876543211",
+    "password": "1234567890"
+  },
+  {
+    "id": 1784100397256,
+    "name": "nandhu",
+    "email": "nandhu@gmail.com",
+    "phone": "7485961586",
+    "password": "nandhun"
+  }
+]

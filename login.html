@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Royal Crest</title>
+
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<div class="auth-container">
+
+    <!-- LEFT SIDE REGISTER -->
+    <div class="register-box">
+
+        <h2>Create Account</h2>
+
+        <form id="registerForm">
+
+            <input type="text"
+                   id="name"
+                   placeholder="Full Name"
+                   required>
+
+            <input type="email"
+                   id="registerEmail"
+                   placeholder="Email Address"
+                   required>
+
+            <input type="tel"
+                   id="phone"
+                   placeholder="Phone Number"
+                   required>
+
+            <input type="password"
+                   id="registerPassword"
+                   placeholder="Password"
+                   required>
+
+            <input type="password"
+                   id="confirmPassword"
+                   placeholder="Confirm Password"
+                   required>
+
+            <button type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- RIGHT SIDE LOGIN -->
+    <div class="login-box">
+
+        <h1>The Royal Crest</h1>
+        <p>Welcome Back</p>
+
+        <form id="loginForm">
+
+            <input type="email"
+                   id="email"
+                   placeholder="Email Address"
+                   required>
+
+            <input type="password"
+                   id="password"
+                   placeholder="Password"
+                   required>
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="JS/login.js"></script>
+<script src="JS/register.js"></script>
+
+</body>
+</html>

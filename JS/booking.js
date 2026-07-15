@@ -1,42 +1,53 @@
-const form = document.getElementById("bookingForm");
+// ===== Auto Select Room =====
 
-form.addEventListener("submit", async (e) => {
+const params = new URLSearchParams(window.location.search);
+
+const selectedRoom = params.get("room");
+
+if (selectedRoom) {
+
+    const roomSelect = document.getElementById("room");
+
+    if (roomSelect) {
+
+        roomSelect.value = selectedRoom;
+
+    }
+
+}
+const bookingForm = document.getElementById("bookingForm");
+
+bookingForm.addEventListener("submit", async (e) => {
+
     e.preventDefault();
 
-    console.log("Submit button clicked");
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
 
-    const booking = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        checkin: document.getElementById("checkin").value,
-        checkout: document.getElementById("checkout").value,
-        room: document.getElementById("room").value,
-        guests: document.getElementById("guests").value,
-        message: document.getElementById("message").value
-    };
+    const checkIn = document.getElementById("checkin").value;
+    const checkOut = document.getElementById("checkout").value;
 
-    console.log(booking);
+    const room = document.getElementById("room").value;
+    const guests = document.getElementById("guests").value;
+    const message = document.getElementById("message").value;
 
-    try {
-        const response = await fetch("http://localhost:5000/book-room", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(booking)
-        });
+    localStorage.setItem(
+        "bookingReceipt",
+        JSON.stringify({
+            bookingId: "RC" + Date.now(),
+            guestName: name,
+            email: email,
+            phone: phone,
+            roomType: room,
+            checkInDate: checkIn,
+            checkOutDate: checkOut,
+            totalGuests: guests,
+            specialRequest: message,
+            status: "Confirmed"
+        })
+    );
 
-        console.log(response.status);
+    window.location.href = "receipt.html";
 
-        const data = await response.json();
-
-        console.log(data);
-
-        alert(data.message);
-
-    } catch (err) {
-        console.error(err);
-        alert("Backend not connected");
-    }
 });

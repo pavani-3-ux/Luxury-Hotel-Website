@@ -26,38 +26,31 @@
 
 <header class="header">
 
-    <div class="container nav-container">
+    <div class="logo">
+        <i class="fas fa-crown"></i>
 
-        <div class="logo">
-
-            <i class="fa-solid fa-crown"></i>
-
-            <div class="logo-text">
-                <h2>The Royal Crest</h2>
-                <span>Luxury Hotel & Resort</span>
-            </div>
-
+        <div class="logo-text">
+            <h1>THE ROYAL CREST</h1>
+            <p>Luxury Hotel & Resort</p>
         </div>
+    </div>
 
-        <nav>
+    <nav class="navbar">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#rooms">Rooms</a>
+        <a href="#amenities">Amenities</a>
+        <a href="#contact">Contact</a>
+    </nav>
 
-            <ul class="nav-links">
-
-                <li><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#rooms">Rooms</a></li>
-                <li><a href="#amenities">Amenities</a></li>
-                <li><a href="#contact">Contact</a></li>
-
-            </ul>
-
-        </nav>
-
-       <a href="booking.html" class="book-btn">Book Now</a>
+    <div class="nav-buttons">
+       <button class="logout-btn" onclick="logout()">
+    Logout
+</button>
+       <button class="book-btn" onclick="window.location.href='booking.html'">Book Now</button>
     </div>
 
 </header>
-
 <!-- ================= HERO ================= -->
 
 <section class="hero" id="home">
@@ -170,7 +163,8 @@
             </div>
 
 
-            <a href="booking.html" class="gold-btn">Book Now</a>
+           <a href="booking.html" class="btn">Book Now</a>
+            
                 Discover More
             </a>
 
@@ -257,7 +251,9 @@
 
         </ul>
 
-      <a href="booking.html" class="gold-btn">Book Now</a>
+     <a href="booking.html?room=Royal Elite Room" class="btn">
+    Book Now
+</a>
 
     </div>
 
@@ -314,8 +310,9 @@
             <li>✔ Private Lounge</li>
         </ul>
 
-        <a href="booking.html" class="gold-btn">Book Now</a>
-
+     <a href="booking.html?room=Deluxe Ocean Suite" class="btn">
+    Book Now
+</a>
     </div>
 
 </div>
@@ -371,8 +368,9 @@
             <li>✔ Welcome Cake</li>
         </ul>
 
-       <a href="booking.html" class="gold-btn">Book Now</a>
-
+     <a href="booking.html?room=Honeymoon Suite" class="btn">
+    Book Now
+</a>
     </div>
 
 </div>
@@ -429,8 +427,9 @@
             <li>✔ BBQ Area</li>
             <li>✔ Free Breakfast</li>
         </ul>
-<a href="booking.html" class="gold-btn">Book Now</a>
-
+<a href="booking.html?room=Family Luxury Room" class="btn">
+    Book Now
+</a>
     </div>
 
 </div>
@@ -487,7 +486,9 @@
             <li>✔ Premium Wi-Fi</li>
         </ul>
 
-       <a href="booking.html" class="gold-btn">Book Now</a>
+      <a href="booking.html?room=Executive Business Suite" class="btn">
+    Book Now
+</a>
     </div>
 
 </div>
@@ -544,8 +545,9 @@
             <li>✔ VIP Concierge</li>
         </ul>
 
-       <a href="booking.html" class="gold-btn">Book Now</a>
-
+    <a href="booking.html?room=Presidential Suite" class="btn">
+    Book Now
+</a>
     </div>
 
 </div>
@@ -733,21 +735,39 @@
 <p><i class="fa-solid fa-clock"></i> Open 24 Hours</p>
             </div>
 
-            <form class="contact-form">
+           <form id="contactForm">
+    <input
+        type="text"
+        id="contactName"
+        placeholder="Full Name"
+        required
+    >
 
-                <input type="text" placeholder="Full Name" required>
+    <input
+        type="email"
+        id="contactEmail"
+        placeholder="Email Address"
+        required
+    >
 
-                <input type="email" placeholder="Email Address" required>
+    <input
+        type="tel"
+        id="contactPhone"
+        placeholder="Phone Number"
+        required
+    >
 
-                <input type="tel" placeholder="Phone Number">
+    <textarea
+        id="contactMessage"
+        placeholder="Write Your Message"
+        required
+    ></textarea>
 
-                <textarea rows="6" placeholder="Write Your Message"></textarea>
+    <button type="submit">
+        Send Message
+    </button>
 
-                <button type="submit" class="gold-btn">
-
-                    Send Message
-
-                </button>
+</form>
 
             </form>
 
@@ -844,4 +864,32 @@
 
 </footer>
 
+</footer>
+
+
+<script>
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
+}
+
+function openBookingForm() {
+    const bookingSection = document.getElementById("booking");
+
+    if (bookingSection) {
+        bookingSection.scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+}
+</script>
+
+
+
+<script src="JS/contact.js"></script>
+
 </body>
+</html>
+
+
+

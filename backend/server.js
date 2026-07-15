@@ -4,52 +4,117 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
+const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
 
-const filePath = path.join(__dirname, "bookings.json");
+const USERS_FILE = path.join(__dirname, "users.json");
 
+// users.json create if not exists
+if (!fs.existsSync(USERS_FILE)) {
+    fs.writeFileSync(USERS_FILE, "[]");
+}
+
+// Test API
 app.get("/", (req, res) => {
-    res.send("Luxury Hotel Backend Running");
+    res.send("Royal Crest Backend Running...");
 });
 
-app.post("/book-room", (req, res) => {
+// ================= REGISTER =================
 
-    let bookings = [];
+app.post("/register", (req, res) => {
 
-    if (fs.existsSync(filePath)) {
-        bookings = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    console.log("REGISTER API HIT");
+
+    const { name, email, phone, password } = req.body;
+
+    if (!name || !email || !phone || !password) {
+        return res.json({
+            success: false,
+            message: "Please fill all fields"
+        });
     }
 
-    const booking = {
+    let users = JSON.parse(fs.readFileSync(USERS_FILE));
+
+    const existingUser = users.find(
+        user => user.email.toLowerCase() === email.toLowerCase()
+    );
+
+    if (existingUser) {
+        return res.json({
+            success: false,
+            message: "User already exists"
+        });
+    }
+
+    const newUser = {
         id: Date.now(),
-        ...req.body
+        name,
+        email,
+        phone,
+        password
     };
 
-    bookings.push(booking);
+    users.push(newUser);
 
-    fs.writeFileSync(filePath, JSON.stringify(bookings, null, 2));
+    fs.writeFileSync(
+        USERS_FILE,
+        JSON.stringify(users, null, 2)
+    );
 
-    res.json({
+    return res.json({
         success: true,
-        message: "Booking Successful!"
+        message: "Registration Successful"
     });
 
 });
 
-app.get("/bookings", (req, res) => {
+// ================= LOGIN =================
 
-    if (!fs.existsSync(filePath)) {
-        return res.json([]);
+app.post("/login", (req, res) => {
+
+    console.log("LOGIN API HIT");
+
+    const { email, password } = req.body;
+
+    let users = JSON.parse(fs.readFileSync(USERS_FILE));
+
+    const user = users.find(
+        u =>
+            u.email === email &&
+            u.password === password
+    );
+
+    if (!user) {
+
+        return res.json({
+            success: false,
+            message: "Invalid Email or Password"
+        });
+
     }
 
-    const bookings = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
-    res.json(bookings);
+    return res.json({
+        success: true,
+        message: "Login Successful",
+        user
+    });
 
 });
 
-app.listen(5000, () => {
-    console.log("Server Running On Port 5000");
+// ================= CONTACT =================
+
+app.post("/contact", (req, res) => {
+
+    res.json({
+        success: true,
+        message: "Message Sent Successfully"
+    });
+
+});
+
+app.listen(PORT, () => {
+    console.log(`✅ Server Running On Port ${PORT}`);
 });

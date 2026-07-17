@@ -2,18 +2,8 @@
 <html lang="en">
 <head>
     <script>
-        try {
-            const user = JSON.parse(localStorage.getItem("user") || "{}");
-            const token = localStorage.getItem("token");
-            if (token && user) {
-                if (user.role === "admin") {
-                    window.location.href = "admin.html";
-                } else {
-                    window.location.href = "home.html";
-                }
-            }
-        } catch (e) {
-            console.error("Error parsing user from localStorage", e);
+        if (localStorage.getItem("user") && localStorage.getItem("token")) {
+            window.location.href = "home.html";
         }
     </script>
     <meta charset="UTF-8">

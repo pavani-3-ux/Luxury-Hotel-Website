@@ -1,16 +1,12 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || "royal_crest_secret_key_123";
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/royalcrest";
+const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -18,85 +14,13 @@ app.use(express.json());
 const USERS_FILE = path.join(__dirname, "users.json");
 const BOOKINGS_FILE = path.join(__dirname, "bookings.json");
 
-// Define Mongoose Schemas & Models
-const userSchema = new mongoose.Schema({
-    id: { type: Number, required: true, unique: true },
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    phone: { type: String, required: true },
-    password: { type: String, required: true },
-    createdAt: { type: String, default: () => new Date().toISOString() }
-});
-
-const bookingSchema = new mongoose.Schema({
-    id: { type: Number, required: true, unique: true },
-    userId: { type: String, required: true },
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: { type: String, required: true },
-    checkin: { type: String, required: true },
-    checkout: { type: String, required: true },
-    room: { type: String, required: true },
-    guests: { type: String, required: true },
-    message: { type: String, default: "" },
-    status: { type: String, default: "Confirmed" },
-    bookedAt: { type: String, default: () => new Date().toISOString() }
-});
-
-const User = mongoose.model("User", userSchema);
-const Booking = mongoose.model("Booking", bookingSchema);
-
-// Seeding / Migration Function
-async function seedDatabase() {
-    try {
-        const userCount = await User.countDocuments();
-        if (userCount === 0 && fs.existsSync(USERS_FILE)) {
-            console.log("Seeding Users to MongoDB Atlas...");
-            const rawUsers = JSON.parse(fs.readFileSync(USERS_FILE, "utf-8"));
-            const usersToInsert = rawUsers.map(user => {
-                // Securely hash plain-text passwords during migration
-                let hashedPassword = user.password;
-                if (user.password && !user.password.startsWith("$2b$")) {
-                    hashedPassword = bcrypt.hashSync(user.password, 10);
-                }
-                return {
-                    id: user.id || Date.now(),
-                    name: user.name,
-                    email: user.email.toLowerCase(),
-                    phone: user.phone,
-                    password: hashedPassword,
-                    createdAt: user.createdAt || new Date().toISOString()
-                };
-            });
-            if (usersToInsert.length > 0) {
-                await User.insertMany(usersToInsert);
-                console.log(`Successfully migrated ${usersToInsert.length} users.`);
-            }
-        }
-
-        const bookingCount = await Booking.countDocuments();
-        if (bookingCount === 0 && fs.existsSync(BOOKINGS_FILE)) {
-            console.log("Seeding Bookings to MongoDB Atlas...");
-            const bookingsToInsert = JSON.parse(fs.readFileSync(BOOKINGS_FILE, "utf-8"));
-            if (bookingsToInsert.length > 0) {
-                await Booking.insertMany(bookingsToInsert);
-                console.log(`Successfully migrated ${bookingsToInsert.length} bookings.`);
-            }
-        }
-    } catch (error) {
-        console.error("❌ Error during database seeding/migration:", error);
-    }
+// Create files if they don't exist
+if (!fs.existsSync(USERS_FILE)) {
+    fs.writeFileSync(USERS_FILE, "[]");
 }
-
-// Connect to MongoDB
-mongoose.connect(MONGODB_URI)
-    .then(async () => {
-        console.log("✅ Connected to MongoDB Atlas");
-        await seedDatabase();
-    })
-    .catch(err => {
-        console.error("❌ MongoDB Atlas Connection Error:", err);
-    });
+if (!fs.existsSync(BOOKINGS_FILE)) {
+    fs.writeFileSync(BOOKINGS_FILE, "[]");
+}
 
 // Test API
 app.get("/", (req, res) => {
@@ -104,7 +28,8 @@ app.get("/", (req, res) => {
 });
 
 // ================= REGISTER =================
-app.post("/register", async (req, res) => {
+
+app.post("/register", (req, res) => {
     console.log("REGISTER API HIT");
     const { name, email, phone, password } = req.body;
 
@@ -115,39 +40,47 @@ app.post("/register", async (req, res) => {
         });
     }
 
+    let users = [];
     try {
-        const existingUser = await User.findOne({ email: email.toLowerCase() });
-        if (existingUser) {
-            return res.json({
-                success: false,
-                message: "User already exists"
-            });
-        }
-
-        const hashedPassword = bcrypt.hashSync(password, 10);
-        const newUser = new User({
-            id: Date.now(),
-            name,
-            email: email.toLowerCase(),
-            phone,
-            password: hashedPassword,
-            createdAt: new Date().toISOString()
-        });
-
-        await newUser.save();
-        return res.json({
-            success: true,
-            message: "Registration Successful"
-        });
-
-    } catch (error) {
-        console.error("Registration error:", error);
-        return res.status(500).json({ success: false, message: "Server Error during registration" });
+        users = JSON.parse(fs.readFileSync(USERS_FILE, "utf8") || "[]");
+    } catch (e) {
+        users = [];
     }
+
+    const existingUser = users.find(
+        user => user.email.toLowerCase() === email.toLowerCase()
+    );
+
+    if (existingUser) {
+        return res.json({
+            success: false,
+            message: "User already exists"
+        });
+    }
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    const newUser = {
+        id: Date.now(),
+        name,
+        email,
+        phone,
+        password: hashedPassword,
+        createdAt: new Date().toISOString()
+    };
+
+    users.push(newUser);
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+
+    return res.json({
+        success: true,
+        message: "Registration Successful"
+    });
 });
 
 // ================= LOGIN =================
-app.post("/login", async (req, res) => {
+
+app.post("/login", (req, res) => {
     console.log("LOGIN API HIT");
     const { email, password } = req.body;
 
@@ -155,7 +88,7 @@ app.post("/login", async (req, res) => {
     if (email === "admin@royalcrest.com" && password === "Royal@123") {
         const token = jwt.sign(
             { id: "admin", email: "admin@royalcrest.com", role: "admin" },
-            JWT_SECRET,
+            "royal_crest_secret_key_123",
             { expiresIn: "24h" }
         );
         return res.json({
@@ -171,59 +104,63 @@ app.post("/login", async (req, res) => {
         });
     }
 
+    let users = [];
     try {
-        const user = await User.findOne({ email: email.toLowerCase() });
-        if (!user) {
-            return res.json({
-                success: false,
-                message: "Invalid Email or Password"
-            });
-        }
-
-        // Check password (supports both plain text and bcrypt hash)
-        let validPassword = false;
-        if (user.password && user.password.startsWith("$2b$")) {
-            validPassword = bcrypt.compareSync(password, user.password);
-        } else {
-            validPassword = (user.password === password);
-        }
-
-        if (!validPassword) {
-            return res.json({
-                success: false,
-                message: "Invalid Email or Password"
-            });
-        }
-
-        const token = jwt.sign(
-            { id: user.id, email: user.email, role: "user" },
-            JWT_SECRET,
-            { expiresIn: "24h" }
-        );
-
-        return res.json({
-            success: true,
-            message: "Login Successful",
-            token,
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                phone: user.phone,
-                role: "user"
-            }
-        });
-
-    } catch (error) {
-        console.error("Login error:", error);
-        return res.status(500).json({ success: false, message: "Server Error during login" });
+        users = JSON.parse(fs.readFileSync(USERS_FILE, "utf8") || "[]");
+    } catch (e) {
+        users = [];
     }
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+    if (!user) {
+        return res.json({
+            success: false,
+            message: "Invalid Email or Password"
+        });
+    }
+
+    // Check password (supports both plain text and bcrypt hash)
+    let validPassword = false;
+    if (user.password && user.password.startsWith("$2b$")) {
+        try {
+            validPassword = bcrypt.compareSync(password, user.password);
+        } catch (e) {
+            validPassword = false;
+        }
+    } else {
+        validPassword = (user.password === password);
+    }
+
+    if (!validPassword) {
+        return res.json({
+            success: false,
+            message: "Invalid Email or Password"
+        });
+    }
+
+    const token = jwt.sign(
+        { id: user.id, email: user.email, role: "user" },
+        "royal_crest_secret_key_123",
+        { expiresIn: "24h" }
+    );
+
+    return res.json({
+        success: true,
+        message: "Login Successful",
+        token,
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone
+        }
+    });
 });
 
 // ================= BOOKINGS =================
 
 // Create booking
-app.post("/bookings", async (req, res) => {
+app.post("/bookings", (req, res) => {
     console.log("CREATE BOOKING API HIT");
     const { userId, name, email, phone, checkin, checkout, room, guests, message } = req.body;
 
@@ -234,50 +171,52 @@ app.post("/bookings", async (req, res) => {
         });
     }
 
+    let bookings = [];
     try {
-        const newBooking = new Booking({
-            id: Date.now(),
-            userId: userId || "guest",
-            name,
-            email,
-            phone,
-            checkin,
-            checkout,
-            room,
-            guests: String(guests),
-            message: message || "",
-            status: "Confirmed",
-            bookedAt: new Date().toISOString()
-        });
-
-        await newBooking.save();
-
-        return res.json({
-            success: true,
-            message: "Booking Successful",
-            booking: newBooking
-        });
-
-    } catch (error) {
-        console.error("Create booking error:", error);
-        return res.status(500).json({ success: false, message: "Server Error while booking" });
+        bookings = JSON.parse(fs.readFileSync(BOOKINGS_FILE, "utf8") || "[]");
+    } catch (e) {
+        bookings = [];
     }
+
+    const newBooking = {
+        id: Date.now(),
+        userId: userId || "guest",
+        name,
+        email,
+        phone,
+        checkin,
+        checkout,
+        room,
+        guests: String(guests),
+        message: message || "",
+        status: "Confirmed",
+        bookedAt: new Date().toISOString()
+    };
+
+    bookings.push(newBooking);
+    fs.writeFileSync(BOOKINGS_FILE, JSON.stringify(bookings, null, 2));
+
+    return res.json({
+        success: true,
+        message: "Booking Successful",
+        booking: newBooking
+    });
 });
 
 // Get all bookings
-app.get("/bookings", async (req, res) => {
+app.get("/bookings", (req, res) => {
     console.log("GET ALL BOOKINGS HIT");
+    let bookings = [];
     try {
-        const bookings = await Booking.find({});
-        return res.json(bookings);
-    } catch (error) {
-        console.error("Get bookings error:", error);
-        return res.status(500).json({ message: "Server Error retrieving bookings" });
+        bookings = JSON.parse(fs.readFileSync(BOOKINGS_FILE, "utf8") || "[]");
+    } catch (e) {
+        bookings = [];
     }
+    return res.json(bookings);
 });
 
 // Update booking status
-app.put("/bookings/:id/status", async (req, res) => {
+app.put("/bookings/:id/status", (req, res) => {
     console.log(`UPDATE BOOKING STATUS HIT: ${req.params.id}`);
     const bookingId = parseInt(req.params.id);
     const { status } = req.body;
@@ -286,74 +225,115 @@ app.put("/bookings/:id/status", async (req, res) => {
         return res.json({ success: false, message: "Status is required" });
     }
 
+    let bookings = [];
     try {
-        const booking = await Booking.findOneAndUpdate(
-            { id: bookingId },
-            { status },
-            { new: true }
-        );
-
-        if (!booking) {
-            return res.json({ success: false, message: "Booking not found" });
-        }
-
-        return res.json({
-            success: true,
-            message: `Booking status updated to ${status}`,
-            booking
-        });
-    } catch (error) {
-        console.error("Update status error:", error);
-        return res.status(500).json({ success: false, message: "Server Error updating status" });
+        bookings = JSON.parse(fs.readFileSync(BOOKINGS_FILE, "utf8") || "[]");
+    } catch (e) {
+        bookings = [];
     }
+    const bookingIndex = bookings.findIndex(b => b.id === bookingId);
+
+    if (bookingIndex === -1) {
+        return res.json({ success: false, message: "Booking not found" });
+    }
+
+    bookings[bookingIndex].status = status;
+    fs.writeFileSync(BOOKINGS_FILE, JSON.stringify(bookings, null, 2));
+
+    return res.json({
+        success: true,
+        message: `Booking status updated to ${status}`,
+        booking: bookings[bookingIndex]
+    });
 });
 
 // Delete booking
-app.delete("/bookings/:id", async (req, res) => {
+app.delete("/bookings/:id", (req, res) => {
     console.log(`DELETE BOOKING HIT: ${req.params.id}`);
     const bookingId = parseInt(req.params.id);
 
+    let bookings = [];
     try {
-        const booking = await Booking.findOneAndDelete({ id: bookingId });
-        if (!booking) {
-            return res.json({ success: false, message: "Booking not found" });
-        }
-
-        return res.json({
-            success: true,
-            message: "Booking deleted successfully"
-        });
-    } catch (error) {
-        console.error("Delete booking error:", error);
-        return res.status(500).json({ success: false, message: "Server Error deleting booking" });
+        bookings = JSON.parse(fs.readFileSync(BOOKINGS_FILE, "utf8") || "[]");
+    } catch (e) {
+        bookings = [];
     }
+    const bookingExists = bookings.some(b => b.id === bookingId);
+
+    if (!bookingExists) {
+        return res.json({ success: false, message: "Booking not found" });
+    }
+
+    const filteredBookings = bookings.filter(b => b.id !== bookingId);
+    fs.writeFileSync(BOOKINGS_FILE, JSON.stringify(filteredBookings, null, 2));
+
+    return res.json({
+        success: true,
+        message: "Booking deleted successfully"
+    });
 });
 
 // ================= USERS =================
 
 // Get all users (for admin dashboard)
-app.get("/users", async (req, res) => {
+app.get("/users", (req, res) => {
     console.log("GET ALL USERS HIT");
+    let users = [];
     try {
-        const users = await User.find({});
-        
-        // Return safe data (exclude passwords)
-        const safeUsers = users.map(u => ({
-            id: u.id,
-            name: u.name,
-            email: u.email,
-            phone: u.phone,
-            createdAt: u.createdAt || new Date(u.id).toISOString()
-        }));
-
-        return res.json(safeUsers);
-    } catch (error) {
-        console.error("Get users error:", error);
-        return res.status(500).json({ message: "Server Error retrieving users" });
+        users = JSON.parse(fs.readFileSync(USERS_FILE, "utf8") || "[]");
+    } catch (e) {
+        users = [];
     }
+    
+    // Return safe data (exclude passwords)
+    const safeUsers = users.map(u => ({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        phone: u.phone,
+        createdAt: u.createdAt || new Date(u.id).toISOString()
+    }));
+
+    return res.json(safeUsers);
+});
+
+// Delete user
+app.delete("/users/:id", (req, res) => {
+    console.log(`DELETE USER HIT: ${req.params.id}`);
+    const userId = parseInt(req.params.id);
+
+    let users = [];
+    try {
+        users = JSON.parse(fs.readFileSync(USERS_FILE, "utf8") || "[]");
+    } catch (e) {
+        users = [];
+    }
+
+    const user = users.find(u => u.id === userId || String(u.id) === req.params.id);
+    if (!user) {
+        return res.json({ success: false, message: "User not found" });
+    }
+
+    // Protect admin user
+    if (req.params.id === "admin" || (user.email && user.email.toLowerCase() === "admin@royalcrest.com")) {
+        return res.json({ success: false, message: "Cannot delete Administrator" });
+    }
+
+    const filteredUsers = users.filter(u => u.id !== userId && String(u.id) !== req.params.id);
+    try {
+        fs.writeFileSync(USERS_FILE, JSON.stringify(filteredUsers, null, 2));
+    } catch (e) {
+        return res.json({ success: false, message: "Failed to write user data" });
+    }
+
+    return res.json({
+        success: true,
+        message: "User deleted successfully"
+    });
 });
 
 // ================= CONTACT =================
+
 app.post("/contact", (req, res) => {
     console.log("CONTACT API HIT");
     res.json({

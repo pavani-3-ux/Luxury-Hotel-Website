@@ -14,5 +14,13 @@
     "phone": "2451687913",
     "password": "$2b$10$./oUPoFcp9k4y.aFEAw.cu7y9ySmHiSFfHItO/uduasYlokvlinN2",
     "createdAt": "2026-07-17T05:36:43.710Z"
+  },
+  {
+    "id": 1784270038535,
+    "name": "jaya",
+    "email": "jaya3@gmail.com",
+    "phone": "9949516890",
+    "password": "$2b$10$ocwpIFAJ13hK8DbWf1fEDOGkyj/I7KqSHf8g83eE.5pbcvc.9ALcq",
+    "createdAt": "2026-07-17T06:33:58.535Z"
   }
 ]

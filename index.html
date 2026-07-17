@@ -1,11 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        try {
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            const token = localStorage.getItem("token");
+            if (token && user) {
+                if (user.role === "admin") {
+                    window.location.href = "admin.html";
+                } else {
+                    window.location.href = "home.html";
+                }
+            }
+        } catch (e) {
+            console.error("Error parsing user from localStorage", e);
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Royal Crest</title>
 
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="CSS/login.css">
 </head>
 <body>
 

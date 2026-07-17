@@ -1,128 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <script>
+        if (!localStorage.getItem("user") || !localStorage.getItem("token")) {
+            window.location.href = "index.html";
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Your Stay | The Royal Crest</title>
 
     <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <style>
-        body{
-            background:#f5f5f5;
-            font-family:Arial,Helvetica,sans-serif;
+        body {
+            background: #f5f5f5;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .booking-container{
-            width:500px;
-            margin:50px auto;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0 0 10px rgba(0,0,0,.2);
+        .booking-container {
+            width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .2);
         }
 
-        h2{
-            text-align:center;
-            margin-bottom:20px;
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #c8a96a;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: color 0.2s ease;
+        }
+
+        .back-home:hover {
+            color: #b28b4d;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         input,
         select,
-        textarea{
-            width:100%;
-            padding:12px;
-            margin-bottom:15px;
-            border:1px solid #ccc;
-            border-radius:5px;
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        button{
-            width:100%;
-            padding:14px;
-            background:#c8a96a;
-            color:white;
-            border:none;
-            border-radius:5px;
-            font-size:18px;
-            cursor:pointer;
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #c8a96a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
         }
 
-        button:hover{
-            background:#b28b4d;
+        button:hover {
+            background: #b28b4d;
         }
     </style>
 
 </head>
+
 <body>
 
-<div class="booking-container">
+    <div class="booking-container">
 
-<h2>Book Your Luxury Stay</h2>
+        <a href="home.html" class="back-home">
+            <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </a>
 
-<form id="bookingForm">
+        <h2>Book Your Luxury Stay</h2>
 
-<input
-type="text"
-id="name"
-placeholder="Full Name"
-required>
+        <form id="bookingForm">
 
-<input
-type="email"
-id="email"
-placeholder="Email Address"
-required>
+            <input type="text" id="name" placeholder="Full Name" required>
 
-<input
-type="tel"
-id="phone"
-placeholder="Phone Number"
-required>
+            <input type="email" id="email" placeholder="Email Address" required>
 
-<label>Check In</label>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
 
-<input
-type="date"
-id="checkin"
-required>
+            <label>Check In</label>
 
-<label>Check Out</label>
+            <input type="date" id="checkin" required>
 
-<input
-type="date"
-id="checkout"
-required>
+            <label>Check Out</label>
 
-<select id="room" name="room" required>
-    <option value="">Select Your Room</option>
-    <option value="Royal Elite Room">Royal Elite Room</option>
-    <option value="Deluxe Ocean Suite">Deluxe Ocean Suite</option>
-    <option value="Presidential Suite">Presidential Suite</option>
-    <option value="Family Luxury Room">Family Luxury Room</option>
-    <option value="Honeymoon Suite">Honeymoon Suite</option>
-    <option value="Executive Business Suite">Executive Business Suite</option>
-</select>
+            <input type="date" id="checkout" required>
 
-<input
-type="number"
-id="guests"
-placeholder="Guests"
-required>
+            <select id="room" name="room" required>
+                <option value="">Select Your Room</option>
+                <option value="Royal Elite Room">Royal Elite Room</option>
+                <option value="Ocean Pearl Suite">Ocean Pearl Suite</option>
+                <option value="Imperial Presidential Palace">Imperial Presidential Palace</option>
+                <option value="Family Paradise Villa">Family Paradise Villa</option>
+                <option value="Eternal Romance Suite">Eternal Romance Suite</option>
+                <option value="Skyline Executive Residence">Skyline Executive Residence</option>
+            </select>
 
-<textarea
-id="message"
-placeholder="Special Requests"></textarea>
+            <input type="number" id="guests" placeholder="Guests" required>
 
-<button type="submit">
+            <textarea id="message" placeholder="Special Requests"></textarea>
 
-Confirm Booking
+            <button type="submit">
 
-</button>
+                Confirm Booking
 
-</form>
+            </button>
 
-</div>
-<script src="JS/booking.js"></script>
+        </form>
+
+    </div>
+    <script src="JS/booking.js"></script>
 </body>
+
 </html>

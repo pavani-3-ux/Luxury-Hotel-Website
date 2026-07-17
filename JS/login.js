@@ -1,3 +1,7 @@
+const API_BASE_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:")
+    ? "http://localhost:5000"
+    : "/api";
+
 const form = document.getElementById("loginForm");
 
 form.addEventListener("submit", async function (e) {
@@ -9,7 +13,7 @@ form.addEventListener("submit", async function (e) {
 
     try {
 
-        const response = await fetch("http://localhost:5000/login", {
+        const response = await fetch(`${API_BASE_URL}/login`, {
 
             method: "POST",
 
@@ -34,7 +38,11 @@ form.addEventListener("submit", async function (e) {
 
             alert("✅ Login Successful!");
 
-          window.location.href = "home.html";
+            if (data.user && data.user.role === "admin") {
+                window.location.href = "admin.html";
+            } else {
+                window.location.href = "home.html";
+            }
 
         } else {
 

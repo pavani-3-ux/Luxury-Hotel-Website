@@ -20,7 +20,7 @@
     "phone": "8596471238",
     "checkin": "2026-07-14",
     "checkout": "2026-07-16",
-    "room": "Presidential Suite",
+    "room": "Imperial Presidential Palace",
     "guests": "3",
     "message": "window view",
     "bookedAt": "2026-07-14T11:40:28.267Z"
@@ -33,7 +33,7 @@
     "phone": "8596471258",
     "checkin": "2026-07-14",
     "checkout": "2026-07-16",
-    "room": "Honeymoon Suite",
+    "room": "Eternal Romance Suite",
     "guests": "2",
     "message": "pleasant environment",
     "bookedAt": "2026-07-15T04:29:06.797Z"
@@ -46,7 +46,7 @@
     "phone": "7485961235",
     "checkin": "2026-07-15",
     "checkout": "2026-07-16",
-    "room": "Presidential Suite",
+    "room": "Imperial Presidential Palace",
     "guests": "3",
     "message": "",
     "bookedAt": "2026-07-15T04:31:58.429Z"

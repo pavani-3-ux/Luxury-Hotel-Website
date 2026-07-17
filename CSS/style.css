@@ -1,7 +1,7 @@
 /* ==========================================
 GOOGLE FONTS
 ========================================== */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 /* ==========================================
 RESET
@@ -15,10 +15,11 @@ RESET
 
 html{
     scroll-behavior:smooth;
+    scroll-padding-top: 110px;
 }
 
 body{
-    font-family:'Poppins',sans-serif;
+    font-family:'Montserrat',sans-serif;
     background:#ffffff;
     color:#333;
     overflow-x:hidden;
@@ -231,6 +232,8 @@ HERO
 position:relative;
 
 height:100vh;
+
+padding-top:110px;
 
 background:url("../images/hero.png") center center/cover no-repeat;
 

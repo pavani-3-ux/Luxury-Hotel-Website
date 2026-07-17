@@ -1,17 +1,21 @@
+const API_BASE_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:")
+    ? "http://localhost:5000"
+    : "/api";
+
 document.getElementById("contactForm").addEventListener("submit", async function(e) {
 
     e.preventDefault();
 
     const data = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        message: document.getElementById("message").value
+        name: document.getElementById("contactName").value,
+        email: document.getElementById("contactEmail").value,
+        phone: document.getElementById("contactPhone").value,
+        message: document.getElementById("contactMessage").value
     };
 
     try {
 
-        const response = await fetch("http://localhost:5000/contact", {
+        const response = await fetch(`${API_BASE_URL}/contact`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -28,6 +32,7 @@ document.getElementById("contactForm").addEventListener("submit", async function
     }
     catch(error){
         alert("Server connection failed");
+        console.error(error);
     }
 
 });

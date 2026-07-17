@@ -68,5 +68,13 @@
     "email": "nandhu@gmail.com",
     "phone": "7485961586",
     "password": "nandhun"
+  },
+  {
+    "id": 1784113698690,
+    "name": "John Doe",
+    "email": "test_1784113698686@example.com",
+    "phone": "1234567890",
+    "password": "userpassword",
+    "createdAt": "2026-07-15T11:08:18.690Z"
   }
 ]

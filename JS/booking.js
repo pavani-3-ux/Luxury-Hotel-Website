@@ -26,6 +26,7 @@
         const checkout = document.getElementById("checkout").value;
         const room = document.getElementById("room").value;
         const guests = document.getElementById("guests").value;
+        const paymentMethod = document.getElementById("paymentMethod").value;
         const message = document.getElementById("message").value;
 
         // Retrieve logged in user's ID
@@ -42,51 +43,72 @@
             console.error("Error parsing user from localStorage:", err);
         }
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/bookings`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    userId,
-                    name,
-                    email,
-                    phone,
-                    checkin,
-                    checkout,
-                    room,
-                    guests,
-                    message
-                })
-            });
+        const paymentModal = document.getElementById("paymentModal");
+        const paymentSpinner = document.getElementById("paymentSpinner");
+        const paymentSuccess = document.getElementById("paymentSuccess");
+        
+        paymentModal.style.display = "flex";
+        paymentSpinner.style.display = "block";
+        paymentSuccess.style.display = "none";
 
-            const data = await response.json();
-
-            if (data.success) {
-                localStorage.setItem(
-                    "bookingReceipt",
-                    JSON.stringify({
-                        bookingId: data.booking.id,
-                        guestName: data.booking.name,
-                        email: data.booking.email,
-                        phone: data.booking.phone,
-                        roomType: data.booking.room,
-                        checkInDate: data.booking.checkin,
-                        checkOutDate: data.booking.checkout,
-                        totalGuests: data.booking.guests,
-                        specialRequest: data.booking.message,
-                        status: data.booking.status
+        setTimeout(async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/bookings`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId,
+                        name,
+                        email,
+                        phone,
+                        checkin,
+                        checkout,
+                        room,
+                        guests,
+                        paymentMethod,
+                        paymentStatus: "Paid",
+                        message
                     })
-                );
+                });
 
-                window.location.href = "receipt.html";
-            } else {
-                alert(data.message || "Booking failed");
+                const data = await response.json();
+
+                if (data.success) {
+                    paymentSpinner.style.display = "none";
+                    paymentSuccess.style.display = "block";
+
+                    localStorage.setItem(
+                        "bookingReceipt",
+                        JSON.stringify({
+                            bookingId: data.booking.id,
+                            guestName: data.booking.name,
+                            email: data.booking.email,
+                            phone: data.booking.phone,
+                            roomType: data.booking.room,
+                            checkInDate: data.booking.checkin,
+                            checkOutDate: data.booking.checkout,
+                            totalGuests: data.booking.guests,
+                            specialRequest: data.booking.message,
+                            status: data.booking.status,
+                            paymentMethod: data.booking.paymentMethod,
+                            paymentStatus: data.booking.paymentStatus
+                        })
+                    );
+
+                    setTimeout(() => {
+                        window.location.href = "receipt.html";
+                    }, 2000);
+                } else {
+                    paymentModal.style.display = "none";
+                    alert(data.message || "Booking failed");
+                }
+            } catch (error) {
+                paymentModal.style.display = "none";
+                alert("Server connection failed");
+                console.log(error);
             }
-        } catch (error) {
-            alert("Server connection failed");
-            console.log(error);
-        }
+        }, 2000);
     });
 }

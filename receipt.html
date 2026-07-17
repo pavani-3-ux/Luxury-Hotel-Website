@@ -123,7 +123,17 @@ button{
 </div>
 
 <div class="row">
-    <span class="label">Status</span>
+    <span class="label">Payment Method</span>
+    <span id="paymentMethod"></span>
+</div>
+
+<div class="row">
+    <span class="label">Payment Status</span>
+    <span id="paymentStatus" style="font-weight:bold;"></span>
+</div>
+
+<div class="row">
+    <span class="label">Booking Status</span>
     <span>Confirmed ✅</span>
 </div>
 
@@ -161,6 +171,17 @@ receipt.checkOutDate;
 
 document.getElementById("guests").innerText =
 receipt.totalGuests;
+
+document.getElementById("paymentMethod").innerText =
+receipt.paymentMethod || "N/A";
+
+const pStatus = document.getElementById("paymentStatus");
+pStatus.innerText = receipt.paymentStatus || "Pending";
+if(receipt.paymentStatus === "Paid") {
+    pStatus.style.color = "green";
+} else {
+    pStatus.style.color = "orange";
+}
 
 </script>
 

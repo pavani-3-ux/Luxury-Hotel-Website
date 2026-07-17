@@ -162,12 +162,12 @@ app.post("/login", (req, res) => {
 // Create booking
 app.post("/bookings", (req, res) => {
     console.log("CREATE BOOKING API HIT");
-    const { userId, name, email, phone, checkin, checkout, room, guests, message } = req.body;
+    const { userId, name, email, phone, checkin, checkout, room, guests, message, paymentMethod, paymentStatus } = req.body;
 
-    if (!name || !email || !phone || !checkin || !checkout || !room || !guests) {
+    if (!name || !email || !phone || !checkin || !checkout || !room || !guests || !paymentMethod) {
         return res.json({
             success: false,
-            message: "Please fill all required fields"
+            message: "Please fill all required fields, including payment method"
         });
     }
 
@@ -190,6 +190,8 @@ app.post("/bookings", (req, res) => {
         guests: String(guests),
         message: message || "",
         status: "Confirmed",
+        paymentMethod: paymentMethod,
+        paymentStatus: paymentStatus || (paymentMethod === "Cash On Arrival" ? "Pending" : "Paid"),
         bookedAt: new Date().toISOString()
     };
 
